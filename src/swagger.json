@@ -1,0 +1,172 @@
+{
+    "openapi": "3.0.3",
+    "info": {
+      "title": "AMC backend API",
+      "description": "any description",
+      "version": "1.0.11"
+    },
+    "servers": [
+      {
+        "url": "https://452rhdy0gf.execute-api.us-east-2.amazonaws.com/dev/back-office/api"
+      }
+    ],
+    "tags": [
+      {
+        "name": "user",
+        "description": "Operaciones sobre el usuario",
+        "externalDocs": {
+          "description": "Find out more",
+          "url": "http://swagger.io"
+        }
+      },
+      {
+        "name": "text",
+        "description": "Operaciones con los textos"
+      }
+    ],
+    "security": [
+      {
+        "bearerAuth": []
+      }
+    ],
+    "paths": {
+      "/user": {
+        "get": {
+          "tags": [
+            "user"
+          ],
+          "summary": "list users",
+          "operationId": "listUser",
+          "responses": {
+            "default": {
+              "description": "User List"
+            }
+          }
+        }
+      },
+      "/textWeb": {
+        "get": {
+          "tags": [
+            "text"
+          ],
+          "summary": "list text",
+          "operationId": "listTexts",
+          "responses": {
+            "200": {
+              "description": "successful operation",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/schemas/GetAllText"
+                    }
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "Invalid status value"
+            },
+            "default": {
+              "description": "Text List"
+            }
+          }
+        }
+      }
+    },
+    "components": {
+      "schemas": {
+        "ObjectText": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string",
+              "example": "4c7bc6a5-2883-403f-9cf4-b1312507e7f3"
+            },
+            "updated_at": {
+              "type": "string",
+              "example": "4/3/2024 19:35:50"
+            },
+            "text_es": {
+              "type": "string",
+              "example": "Test titulo"
+            },
+            "created_at": {
+              "type": "string",
+              "example": "10/1/2024 3:55:29"
+            },
+            "view": {
+              "type": "string",
+              "example": "Home View"
+            }
+          }
+        },
+        "GetAllText": {
+          "type": "object",
+          "properties": {
+            "code": {
+              "type": "integer",
+              "format": "int64",
+              "example": 1
+            },
+            "textWeb": {
+              "$ref": "#/components/schemas/ObjectText"
+            }
+          }
+        },
+        "User": {
+          "type": "object",
+          "properties": {
+            "code": {
+              "type": "integer"
+            },
+            "users": {
+              "type": "object"
+            }
+          }
+        }
+      },
+      "requestBodies": {
+        "ObjectText": {
+          "description": "object for texts",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ObjectText"
+              }
+            }
+          }
+        },
+        "GetAllText": {
+          "description": "object for texts",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GetAllText"
+              }
+            }
+          }
+        },
+        "User": {
+          "description": "List of user object",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/User"
+                }
+              }
+            }
+          }
+        }
+      },
+      "securitySchemes": {
+        "bearerAuth": {
+          "type": "http",
+          "scheme": "bearer"
+        }
+      }
+    }
+  }
