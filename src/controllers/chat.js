@@ -61,6 +61,8 @@ const createNewChatAndGenerateQuery = async (req, res) => {
       content: assistantResponse
     });
 
+    await delay(7000); // Pausa la ejecución por 7000 milisegundos (7 segundos)
+
     // 5. RESPONDER AL CLIENTE
     res.status(201).json({
       chatId,
@@ -173,6 +175,8 @@ const continueConversationAndGenerateQuery = async (req, res) => {
     // 6. Actualizar la marca de tiempo del chat (para orden en la sidebar)
     await chat.update({ updatedAt: new Date() });
 
+    await delay(7000);
+
     // 7. RESPONDER AL CLIENTE
     res.status(200).json({
       chatId: chat_id,
@@ -186,6 +190,9 @@ const continueConversationAndGenerateQuery = async (req, res) => {
     res.status(500).json({ error: 'Hubo un error al procesar la solicitud.', detail: error.message });
   }
 };
+
+// Función para crear una pausa (delay)
+const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 
 
 module.exports = {
