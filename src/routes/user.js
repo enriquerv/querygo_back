@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 
 // Importar las fucniones del controlador 
-const { getUsers, postUsers,loginUser,getUser} = require("../controllers/user.js");
+const { getUsers, postUsers,getUser, deleteUser, updatedUser} = require("../controllers/user.js");
 
 // Importar las fucniones del validador
 // const {validatorRegister, validationLogin, validationUser, validatorUpdate } = require('../validators/user.js')
@@ -26,5 +26,9 @@ const { getUsers, postUsers,loginUser,getUser} = require("../controllers/user.js
 router.get("/", getUsers);
 router.get("/:id", getUser);
 router.post("/create", postUsers);
+router.delete("/delete/:id", deleteUser);
+router.put("/update/:id", updatedUser);
+
+
 
 module.exports = router;

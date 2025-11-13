@@ -34,6 +34,9 @@ const User = sequelize.define("User", {
     paranoid: true,   // ✅ activa deletedAt
     deletedAt: "deletedAt", // nombre del campo
     underscored: false, // puedes ponerlo en true si quieres snake_case
+    createdAt: "createdAt",
+    updatedAt: "updatedAt",
+    dateFormat: "YYYY-MM-DD HH:mm:ss",
     hooks: {
         beforeCreate: async (user) => {
             if (user.password) {
