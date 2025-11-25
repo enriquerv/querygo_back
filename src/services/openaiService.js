@@ -15,7 +15,7 @@ async function generateQueryFromPrompt(userPrompt, dbSchema) {
             Reglas estrictas:
             - Devuelve SOLO la consulta SQL, sin explicaciones.
             - No agregues backticks, markdown ni texto adicional.
-            - Si no puedes generar la consulta correctamente, devuelve: ERROR.
+            - Si no puedes generar la consulta correctamente, devuelve: el porque.
 
             ### Esquema de la base de datos
             ${dbSchema}
@@ -32,13 +32,13 @@ async function generateQueryFromPrompt(userPrompt, dbSchema) {
 
         const rawResponse = completion.choices[0].message.content.trim();
 
-        if (!rawResponse || rawResponse.toUpperCase() === "ERROR") {
-            return {
-                generatedQuery: null,
-                statusQuery: "error",
-                MessageQuery: "No pude generar una consulta SQL válida basada en tu solicitud.",
-            };
-        }
+        // if (!rawResponse || rawResponse.toUpperCase() === "ERROR") {
+        //     return {
+        //         generatedQuery: null,
+        //         statusQuery: "error",
+        //         MessageQuery: "No pude generar una consulta SQL válida basada en tu solicitud.",
+        //     };
+        // }
 
         return {
             generatedQuery: rawResponse,
