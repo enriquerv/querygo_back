@@ -6,7 +6,7 @@ const chatController = require('../controllers/chat');
 router.post('/', chatController.createNewChatAndGenerateQuery); 
 
 //Ruta para obtener la lista de todos los chats de un usuario
-router.get('/', chatController.getUserChats); 
+router.post('/list', chatController.getUserChats); 
 
 //Ruta para obtener la conversación completa de un chat específico
 router.get('/:chatId', chatController.getConversationByChatId); 

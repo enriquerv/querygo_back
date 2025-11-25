@@ -26,9 +26,8 @@ const { succes, error } = require("../utils/handleResponse");
 // 1. Lógica Principal: Crear Chat, Generar Query, Ejecutar y Reportar
 // -------------------------------------------------------------------------
 const createNewChatAndGenerateQuery = async (req, res) => {
-  const { user_prompt } = req.body;
-  const userId = DUMMY_USER_ID; // Usar req.user.id con authMiddleware
-
+  const { user_prompt, id } = req.body;
+  const userId = id; // Usar req.user.id con authMiddleware
   if (!user_prompt) {
     return res.status(400).json({ error: 'Falta la solicitud del usuario (user_prompt).' });
   }
@@ -82,7 +81,7 @@ const createNewChatAndGenerateQuery = async (req, res) => {
 // 2. Obtener Historial de Chats (Sidebar)
 // -------------------------------------------------------------------------
 const getUserChats = async (req, res) => {
-  const userId = DUMMY_USER_ID; // Usar req.user.id con authMiddleware
+  const userId = req.body.id; // Usar req.user.id con authMiddleware
 
   try {
     const chats = await Chat.findAll({
@@ -104,7 +103,10 @@ const getUserChats = async (req, res) => {
 // -------------------------------------------------------------------------
 const getConversationByChatId = async (req, res) => {
   const { chatId } = req.params;
-  const userId = DUMMY_USER_ID; // Para verificar pertenencia del chat
+  const { userId } = req.query;
+  if (!chatId || !userId) {
+    return res.status(400).json({ error: 'Faltan parámetros: chatId y/o userId.' });
+  }
 
   try {
     const chat = await Chat.findOne({ where: { id: chatId, user_id: userId } });
@@ -135,8 +137,7 @@ const getConversationByChatId = async (req, res) => {
 // -------------------------------------------------------------------------
 const continueConversationAndGenerateQuery = async (req, res) => {
   // El frontend debe enviar el ID del chat y el nuevo prompt del usuario
-  const { chat_id, user_prompt } = req.body;
-  const userId = DUMMY_USER_ID; // Usar req.user.id con authMiddleware
+  const { chat_id, user_prompt, userId } = req.body;
 
   if (!chat_id || !user_prompt) {
     return res.status(400).json({ error: 'Faltan parámetros: chat_id y/o user_prompt.' });
