@@ -40,7 +40,8 @@ const postUsers = async (req, res) => {
   try {
     console.log(req.body);
     const { first_name, last_name, email, password } = req.body;
-    const newUser = await User.create({ first_name, last_name, email, password });
+    const role_id = 1; // Asignar un role_id por defecto
+    const newUser = await User.create({ first_name, last_name, email, password, role_id });
     succes(res, newUser, 201);
   } catch (err) {
     error(res, [err.message], 500);

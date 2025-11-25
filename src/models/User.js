@@ -1,43 +1,53 @@
+// models/User.js
 const { DataTypes } = require("sequelize");
 const bcrypt = require("bcrypt");
 const sequelize = require("./index");
 
-const User = sequelize.define("User", {
-    id: {
-        type: DataTypes.INTEGER,
-        autoIncrement: true,
-        primaryKey: true,
+const User = sequelize.define(
+    "User",
+    {
+        id: { type: DataTypes.INTEGER.UNSIGNED, autoIncrement: true, primaryKey: true },
+
+        no_emp: { type: DataTypes.STRING, allowNull: true },
+        job: { type: DataTypes.STRING, allowNull: true },
+        first_name: { type: DataTypes.STRING, allowNull: false },
+        last_name: { type: DataTypes.STRING, allowNull: false },
+        email: { type: DataTypes.STRING, allowNull: false, unique: true },
+        password: { type: DataTypes.STRING, allowNull: false },
+        user_type: { type: DataTypes.STRING, allowNull: true },
+        birthdate: { type: DataTypes.STRING, allowNull: true },
+        phone: { type: DataTypes.STRING, allowNull: true },
+
+        country_id: { type: DataTypes.INTEGER, allowNull: true },
+        state_id: { type: DataTypes.INTEGER, allowNull: true },
+        city_id: { type: DataTypes.INTEGER, allowNull: true },
+        municipality: { type: DataTypes.STRING, allowNull: true },
+        colony: { type: DataTypes.STRING, allowNull: true },
+        street: { type: DataTypes.STRING, allowNull: true },
+        no_ext: { type: DataTypes.STRING, allowNull: true },
+        no_int: { type: DataTypes.STRING, allowNull: true },
+        postal_code: { type: DataTypes.STRING, allowNull: true },
+        rfc: { type: DataTypes.STRING, allowNull: true },
+
+        role_id: { type: DataTypes.INTEGER, allowNull: false },
+        area_id: { type: DataTypes.INTEGER, allowNull: true },
+        is_main_cashier: { type: DataTypes.INTEGER, allowNull: true },
+        is_cashier: { type: DataTypes.INTEGER, allowNull: true },
+        last_login: { type: DataTypes.DATE, allowNull: true },
+        is_supervisor: { type: DataTypes.INTEGER, allowNull: true },
+
+        password_at: { type: DataTypes.DATE, allowNull: true },
+        user_profiles: { type: DataTypes.STRING, allowNull: true },
+        pass_incidence: { type: DataTypes.STRING, allowNull: true },
     },
-    first_name: {
-        type: DataTypes.STRING(100),
-        allowNull: false,
-    },
-    last_name: {
-        type: DataTypes.STRING(100),
-        allowNull: false,
-    },
-    email: {
-        type: DataTypes.STRING(100),
-        allowNull: false,
-        unique: true,
-        validate: {
-            isEmail: true,
-        },
-    },
-    password: {
-        type: DataTypes.STRING(100),
-        allowNull: false,
-    },
-}, {
-    tableName: "users",
-    timestamps: true, // ✅ activa createdAt y updatedAt
-    paranoid: true,   // ✅ activa deletedAt
-    deletedAt: "deletedAt", // nombre del campo
-    underscored: false, // puedes ponerlo en true si quieres snake_case
-    createdAt: "createdAt",
-    updatedAt: "updatedAt",
-    dateFormat: "YYYY-MM-DD HH:mm:ss",
-    hooks: {
+    {
+        tableName: "users",
+        timestamps: true,
+        createdAt: "created_at",
+        updatedAt: "updated_at",
+        paranoid: true,
+        deletedAt: "deleted_at",
+        hooks: {
         beforeCreate: async (user) => {
             if (user.password) {
                 const salt = await bcrypt.genSalt(10);
@@ -51,18 +61,18 @@ const User = sequelize.define("User", {
             }
         },
     },
-});
+    }
+);
 
 // 🔹 Método para validar password
 User.prototype.validPassword = async function (password) {
     return await bcrypt.compare(password, this.password);
 };
 
-// 🔹 Esto sincroniza SOLO este modelo
 (async () => {
     try {
-        await User.sync({ alter: true });
-        console.log("✅ Tabla 'users' sincronizada con paranoid y deletedAt.");
+        await User.sync({ alter: false });
+        console.log("✅ Tabla 'users' sincronizada.");
     } catch (err) {
         console.error("❌ Error sincronizando User:", err);
     }

@@ -7,7 +7,8 @@ const serverless = require("serverless-http");
 const path = require("path");
 const cors = require("cors");
 const swaggerUi = require('swagger-ui-express');
-const SwaggerDoc = require('./swagger.json')
+const SwaggerDoc = require('./swagger.json');
+
 
 app.use(cors());
 

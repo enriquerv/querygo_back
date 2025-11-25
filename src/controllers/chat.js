@@ -2,17 +2,41 @@
 // Importar modelos de Sequelize
 const Chat = require('../models/Chat');
 const Conversation = require('../models/Conversation');
+const InvoiceFolios = require('../models/InvoiceFolios.js');
+const Clients = require('../models/Clients.js');
+const FinalMasters = require('../models/FinalMasters.js');
+const FinalHouses = require('../models/FinalHouses.js');
+const Revalidations = require('../models/Revalidations.js');
+const InvoiceExits = require('../models/InvoiceExits.js');
+const RevaCancelations = require('../models/RevaCancelations.js');
+const CIClients = require('../models/CIClients.js');
+const InvoiceCores = require('../models/InvoiceCores.js');
+const CheckoutPayments = require('../models/CheckoutPayments.js');
+const CPaymentConditions = require('../models/CPaymentConditions.js');
+const CPaymentTypes = require('../models/CPaymentTypes.js');
+const CCfdiTypes = require('../models/CCfdiTypes.js');
+const Agents = require('../models/Agents.js');
+const CExitTypes = require('../models/CExitTypes.js');
+const OtherExitTypes = require('../models/OtherExitTypes.js');
+const InvoiceWarehouses = require('../models/InvoiceWarehouses.js');
+const MenuModules = require('../models/MenuModules.js');
+const UserPermissions = require('../models/UserPermissions.js');
 // Importar la lógica del motor de Query Go (Text-to-SQL y Reportes)
-// const { generateQueryFromPrompt } = require('../services/openaiService'); // Tendrás que crear este servicio
+const { generateQueryFromPrompt } = require('../services/openaiService');
 // const { executeQueryAndGenerateReport } = require('../services/dataService'); // Tendrás que crear este servicio
 
 
 // 💡 NOTA: Reemplaza esto con la obtención real del esquema de la base de datos
 // Por ahora, usamos el esquema codificado como placeholder
 const TEMP_DB_SCHEMA = `
-    -- Esquema simplificado para la IA
-    -- Tabla: final_masters (id, awb, pieces)
-    -- Tabla: invoice_folios (id, final_master_id, total, timbered_at)
+    Tablas: 
+      c_cargo_types (id, name, created_at, updated_at)
+      locations (id, name, max_weight, max_vol, created_at, updated_at)
+      locations_c_cargo_types (id, location_id, cargo_type_id, created_at, updated_at)
+      
+      Relaciones: 
+      locations_c_cargo_types.location_id -> locations.id
+      locations_c_cargo_types.cargo_type_id -> c_cargo_types.id
 `;
 
 // Asume que obtienes el userId desde un middleware de autenticación
@@ -42,11 +66,17 @@ const createNewChatAndGenerateQuery = async (req, res) => {
     ]);
 
     // 2. GENERAR QUERY (Text-to-SQL con OpenAI)
-    // const generatedQuery = await generateQueryFromPrompt(user_prompt, TEMP_DB_SCHEMA);
-    const generatedQuery = "SELECT awb, pieces FROM final_masters WHERE pieces > 10;"; // Placeholder fijo para pruebas
+    const { generatedQuery, statusQuery, MessageQuery } = await generateQueryFromPrompt(user_prompt, TEMP_DB_SCHEMA);
+    console.log("Generated Query:", generatedQuery);
+    console.log("Status Query:", statusQuery);
+    console.log("Message Query:", MessageQuery);
+    // return error(res, 500, "Funcionalidad de generación de query deshabilitada temporalmente para pruebas.");
+    // const generatedQuery = "SELECT first_name, last_name, email FROM users;"; // Placeholder fijo para pruebas
+    // const statusQuery = "success"; // Placeholder fijo para pruebas
+    // const MessageQuery = "Consulta generada correctamente."; // Placeholder fijo para pruebas
 
     // 3. EJECUTAR QUERY y GENERAR REPORTE
-    // const { reportPath, reportMessage, dataRows } = await executeQueryAndGenerateReport(generatedQuery, userId);
+    // const { reportPath, reportMessage } = await executeQueryAndGenerateReport(generatedQuery, userId);
     const reportPath = `/reports/report_${chatId}.pdf`; // Placeholder fijo para pruebas
     const reportMessage = "El reporte ha sido generado correctamente con los datos solicitados."; // Placeholder fijo para pruebas
 
@@ -65,7 +95,7 @@ const createNewChatAndGenerateQuery = async (req, res) => {
     // 5. RESPONDER AL CLIENTE
     res.status(201).json({
       chatId,
-      message: 'Consulta procesada y reporte generado.',
+      message: assistantResponse,
       response: assistantResponse,
       reportPath: reportPath
     });
@@ -197,8 +227,8 @@ const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 
 
 module.exports = {
-    createNewChatAndGenerateQuery,
-    getUserChats,
-    getConversationByChatId,
-    continueConversationAndGenerateQuery,
+  createNewChatAndGenerateQuery,
+  getUserChats,
+  getConversationByChatId,
+  continueConversationAndGenerateQuery,
 };

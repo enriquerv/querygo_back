@@ -6,8 +6,8 @@ const Conversation = require("../models/Conversation");
  */
 const getConversations = async (req, res) => {
   try {
-    const users = await Conversation.findAll();
-    succes(res, users, 200);
+    const conversations = await Conversation.findAll();
+    succes(res, conversations, 200);
   } catch (err) {
     error(res, [err.message], 500);
   }
