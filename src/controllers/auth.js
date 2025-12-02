@@ -14,6 +14,7 @@ const loginUser = async (req, res) => {
     succes(res, { message: "Login exitoso", user }, 200);
   } catch (err) {
     error(res, [err.message], 500);
+    console.log(err);
   }
 };
 

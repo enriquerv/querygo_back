@@ -3,12 +3,13 @@ const ExcelJS = require("exceljs");
 const path = require("path");
 const fs = require("fs");
 const sequelize = require("../models"); 
+const Report = require("../models/Report");
 /**
  * Ejecuta una query SQL y genera un reporte Excel .xlsx
  * @param {string} sqlQuery
  * @param {number|string} userId
  */
-async function executeQueryAndGenerateReport(sqlQuery, userId) {
+async function executeQueryAndGenerateReport(sqlQuery, userId, conversation_id, chatId) {
   try {
     // 1️⃣ Ejecutar la consulta SQL
     const [rows] = await sequelize.query(sqlQuery, { raw: true });
@@ -45,6 +46,12 @@ async function executeQueryAndGenerateReport(sqlQuery, userId) {
     const filePath = path.join(reportsDir, filename);
 
     await workbook.xlsx.writeFile(filePath);
+    await Report.create({
+      user_id: userId,
+      conversation_id,
+      report_path: `/reports/${filename}`,
+      description: "Reporte Excel generado correctamente."
+    })
 
     return {
       success: true,

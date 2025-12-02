@@ -66,7 +66,7 @@ const createNewChatAndGenerateQuery = async (req, res) => {
     const chat = await Chat.create({ title: user_prompt.substring(0, 50) + '...', user_id: userId });
     const chatId = chat.id;
 
-    await Conversation.bulkCreate([
+    const conv = await Conversation.bulkCreate([
       { chat_id: chatId, role: 'user', content: user_prompt }
     ]);
 
@@ -78,7 +78,7 @@ const createNewChatAndGenerateQuery = async (req, res) => {
     
 
     // 3. EJECUTAR QUERY y GENERAR REPORTE
-    const { reportPath, reportMessage } = await executeQueryAndGenerateReport(generatedQuery, userId);
+    const { reportPath, reportMessage } = await executeQueryAndGenerateReport(generatedQuery, userId, conv[0].id, chatId);
     console.log("Report Path:", reportPath);
     console.log("Report Message:", reportMessage);
 
@@ -184,7 +184,10 @@ const continueConversationAndGenerateQuery = async (req, res) => {
     }
 
     // 2. Guardar el nuevo prompt del usuario en la conversación
-    await Conversation.create({ chat_id, role: 'user', content: user_prompt });
+    const conv = await Conversation.create({ chat_id, role: 'user', content: user_prompt });
+console.log("================")
+console.log(conv.id)
+console.log("================")
 
     // 3. GENERAR QUERY (Text-to-SQL con OpenAI)
     // La lógica es la misma: generar una query basada en el prompt y el esquema
@@ -193,8 +196,12 @@ const continueConversationAndGenerateQuery = async (req, res) => {
     console.log("Status Query:", statusQuery);
     console.log("Message Query:", MessageQuery);
 
+    console.log("================")
+    console.log(generatedQuery, userId,  userId, conv.id, chat_id)
+    console.log("================")
+
     // 4. EJECUTAR QUERY y GENERAR REPORTE
-    const { reportPath, reportMessage } = await executeQueryAndGenerateReport(generatedQuery, userId);
+    const { reportPath, reportMessage } = await executeQueryAndGenerateReport(generatedQuery,userId, conv.id, chat_id);
     console.log("Report Path:", reportPath);
     console.log("Report Message:", reportMessage);
 
