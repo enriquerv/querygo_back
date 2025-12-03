@@ -15,6 +15,7 @@ async function generateQueryFromPrompt(userPrompt, dbSchema) {
             Reglas estrictas:
             - Devuelve SOLO la consulta SQL, sin explicaciones.
             - No agregues backticks, markdown ni texto adicional.
+            - No agregues palabras reservadas para los nombres alias de las tablas como "if"
             - Si no puedes generar la consulta correctamente, devuelve: el porque.
 
             ### Esquema de la base de datos
