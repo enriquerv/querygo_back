@@ -15,23 +15,27 @@ async function generateQueryFromPrompt(userPrompt, dbSchema) {
             Reglas estrictas:
             - Devuelve SOLO la consulta SQL, sin explicaciones.
             - No agregues backticks, markdown ni texto adicional.
-            - No agregues palabras reservadas para los nombres alias de las tablas como "if"
+            - No agregues palabras reservadas para los nombres alias de las tablas como "if, IF" o cualquier palabra reservada de SQL
+            - Que los ALIAS de tablas sean minimo de 4 letras
             - Si no puedes generar la consulta correctamente, devuelve: el porque.
+            - Que la query tenga una validación tipo IF de si existe el dato relacionado en la otra tabla cuando haya cruces si no existe que ponga null
 
             ### Esquema de la base de datos
             ${dbSchema}
         `;
 
-        const completion = await client.chat.completions.create({
-            model: "gpt-3.5-turbo", // O el modelo que desees
-            temperature: 0.1,
-            messages: [
+        const response = await client.responses.create({
+            model: "gpt-4.1-mini",
+            input: [
                 { role: "system", content: systemInstructions },
                 { role: "user", content: userPrompt }
             ],
+            temperature: 0.1
         });
 
-        const rawResponse = completion.choices[0].message.content.trim();
+
+        // const rawResponse = completion.choices[0].message.content.trim();
+        const rawResponse = response.output_text;
 
         // if (!rawResponse || rawResponse.toUpperCase() === "ERROR") {
         //     return {
