@@ -200,11 +200,8 @@ const continueConversationAndGenerateQuery = async (req, res) => {
     // 6. Actualizar la marca de tiempo del chat (para orden en la sidebar)
     await chat.update({ updatedAt: new Date() });
 
-<<<<<<< HEAD
     // await delay(7000);
 
-=======
->>>>>>> dba8c2b (ajustes)
     // 7. RESPONDER AL CLIENTE
     res.status(200).json({
       chatId: chat_id,
