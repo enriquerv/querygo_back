@@ -197,7 +197,7 @@ const createNewChatAndGenerateQuery = async (req, res) => {
       content: assistantResponse
     });
 
-    await delay(7000); // Pausa la ejecución por 7000 milisegundos (7 segundos)
+    // await delay(7000); // Pausa la ejecución por 7000 milisegundos (7 segundos)
 
     // 5. RESPONDER AL CLIENTE
     res.status(201).json({
@@ -322,7 +322,7 @@ console.log("================")
     // 6. Actualizar la marca de tiempo del chat (para orden en la sidebar)
     await chat.update({ updatedAt: new Date() });
 
-    await delay(7000);
+    // await delay(7000);
 
     // 7. RESPONDER AL CLIENTE
     res.status(200).json({
