@@ -68,8 +68,8 @@ const FinalHouse = sequelize.define(
 
 (async () => {
   try {
-    await FinalHouse.sync({ alter: true });
-    console.log("✅ Tabla 'final_houses' sincronizada.");
+    await FinalHouse.sync({ alter: false });
+    //console.log("✅ Tabla 'final_houses' sincronizada.");
   } catch (err) {
     console.error("❌ Error sincronizando FinalHouse:", err);
   }

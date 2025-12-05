@@ -22,8 +22,8 @@ const CPaymentType = sequelize.define(
 
 (async () => {
   try {
-    await CPaymentType.sync({ alter: true });
-    console.log("✅ Tabla 'c_payment_types' sincronizada.");
+    await CPaymentType.sync({ alter: false });
+    //console.log("✅ Tabla 'c_payment_types' sincronizada.");
   } catch (err) {
     console.error("❌ Error sincronizando CPaymentType:", err);
   }

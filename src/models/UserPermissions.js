@@ -22,8 +22,8 @@ const UserPermission = sequelize.define(
 
 (async () => {
   try {
-    await UserPermission.sync({ alter: true });
-    console.log("✅ Tabla 'user_permissions' sincronizada.");
+    await UserPermission.sync({ alter: false });
+    //console.log("✅ Tabla 'user_permissions' sincronizada.");
   } catch (err) {
     console.error("❌ Error sincronizando UserPermission:", err);
   }

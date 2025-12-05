@@ -34,8 +34,8 @@ const RevaCancelation = sequelize.define(
 
 (async () => {
   try {
-    await RevaCancelation.sync({ alter: true });
-    console.log("✅ Tabla 'reva_cancelations' sincronizada.");
+    await RevaCancelation.sync({ alter: false });
+    //console.log("✅ Tabla 'reva_cancelations' sincronizada.");
   } catch (err) {
     console.error("❌ Error sincronizando RevaCancelation:", err);
   }

@@ -36,8 +36,8 @@ const Revalidation = sequelize.define(
 
 (async () => {
   try {
-    await Revalidation.sync({ alter: true });
-    console.log("✅ Tabla 'revalidations' sincronizada.");
+    await Revalidation.sync({ alter: false });
+    //console.log("✅ Tabla 'revalidations' sincronizada.");
   } catch (err) {
     console.error("❌ Error sincronizando Revalidation:", err);
   }

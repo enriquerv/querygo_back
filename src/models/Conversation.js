@@ -29,8 +29,8 @@ const Conversation = sequelize.define("Conversation", {
 // 🔹 Sincroniza solo este modelo
 (async () => {
     try {
-        await Conversation.sync({ alter: true });
-        console.log("✅ Tabla 'conversations' sincronizada.");
+        await Conversation.sync({ alter: false });
+        //console.log("✅ Tabla 'conversations' sincronizada.");
     } catch (err) {
         console.error("❌ Error sincronizando Conversation:", err);
     }

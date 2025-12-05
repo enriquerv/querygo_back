@@ -33,8 +33,8 @@ const Report = sequelize.define("Report", {
 // 🔹 Sincroniza solo este modelo
 (async () => {
     try {
-        await Report.sync({ alter: true });
-        console.log("✅ Tabla 'reports' sincronizada.");
+        await Report.sync({ alter: false });
+        //console.log("✅ Tabla 'reports' sincronizada.");
     } catch (err) {
         console.error("❌ Error sincronizando Report:", err);
     }

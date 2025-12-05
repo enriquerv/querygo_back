@@ -25,8 +25,8 @@ const DbSchema = sequelize.define("DbSchema", {
 // 🔹 Sincroniza solo este modelo
 (async () => {
     try {
-        await DbSchema.sync({ alter: true });
-        console.log("✅ Tabla 'dbschemas' sincronizada.");
+        await DbSchema.sync({ alter: false });
+        //console.log("✅ Tabla 'dbschemas' sincronizada.");
     } catch (err) {
         console.error("❌ Error sincronizando DbSchema:", err);
     }

@@ -66,8 +66,8 @@ const InvoiceExit = sequelize.define(
 
 (async () => {
   try {
-    await InvoiceExit.sync({ alter: true });
-    console.log("✅ Tabla 'invoice_exits' sincronizada.");
+    await InvoiceExit.sync({ alter: false });
+    //console.log("✅ Tabla 'invoice_exits' sincronizada.");
   } catch (err) {
     console.error("❌ Error sincronizando InvoiceExit:", err);
   }

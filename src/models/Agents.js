@@ -22,8 +22,8 @@ const Agent = sequelize.define(
 
 (async () => {
   try {
-    await Agent.sync({ alter: true });
-    console.log("✅ Tabla 'agents' sincronizada.");
+    await Agent.sync({ alter: false });
+    //console.log("✅ Tabla 'agents' sincronizada.");
   } catch (err) {
     console.error("❌ Error sincronizando Agent:", err);
   }

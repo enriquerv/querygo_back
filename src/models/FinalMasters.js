@@ -388,8 +388,8 @@ const FinalMaster = sequelize.define(
 // 🔹 Sincronizar SOLO este modelo
 (async () => {
   try {
-    await FinalMaster.sync({ alter: true });
-    console.log("✅ Tabla 'final_masters' sincronizada.");
+    await FinalMaster.sync({ alter: false });
+    //console.log("✅ Tabla 'final_masters' sincronizada.");
   } catch (err) {
     console.error("❌ Error sincronizando FinalMaster:", err);
   }

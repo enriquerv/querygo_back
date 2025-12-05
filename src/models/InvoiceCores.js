@@ -40,8 +40,8 @@ const InvoiceCore = sequelize.define(
 
 (async () => {
   try {
-    await InvoiceCore.sync({ alter: true });
-    console.log("✅ Tabla 'invoice_cores' sincronizada.");
+    await InvoiceCore.sync({ alter: false });
+    //console.log("✅ Tabla 'invoice_cores' sincronizada.");
   } catch (err) {
     console.error("❌ Error sincronizando InvoiceCore:", err);
   }

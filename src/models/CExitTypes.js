@@ -22,8 +22,8 @@ const CExitType = sequelize.define(
 
 (async () => {
   try {
-    await CExitType.sync({ alter: true });
-    console.log("✅ Tabla 'c_exit_types' sincronizada.");
+    await CExitType.sync({ alter: false });
+    //console.log("✅ Tabla 'c_exit_types' sincronizada.");
   } catch (err) {
     console.error("❌ Error sincronizando CExitType:", err);
   }

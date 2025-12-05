@@ -22,8 +22,8 @@ const CPaymentCondition = sequelize.define(
 
 (async () => {
   try {
-    await CPaymentCondition.sync({ alter: true });
-    console.log("✅ Tabla 'c_payment_conditions' sincronizada.");
+    await CPaymentCondition.sync({ alter: false });
+    //console.log("✅ Tabla 'c_payment_conditions' sincronizada.");
   } catch (err) {
     console.error("❌ Error sincronizando CPaymentCondition:", err);
   }

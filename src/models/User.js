@@ -72,7 +72,7 @@ User.prototype.validPassword = async function (password) {
 (async () => {
     try {
         await User.sync({ alter: false });
-        console.log("✅ Tabla 'users' sincronizada.");
+        //console.log("✅ Tabla 'users' sincronizada.");
     } catch (err) {
         console.error("❌ Error sincronizando User:", err);
     }

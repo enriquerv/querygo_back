@@ -22,8 +22,8 @@ const OtherExitType = sequelize.define(
 
 (async () => {
   try {
-    await OtherExitType.sync({ alter: true });
-    console.log("✅ Tabla 'other_exit_types' sincronizada.");
+    await OtherExitType.sync({ alter: false });
+    //console.log("✅ Tabla 'other_exit_types' sincronizada.");
   } catch (err) {
     console.error("❌ Error sincronizando OtherExitType:", err);
   }

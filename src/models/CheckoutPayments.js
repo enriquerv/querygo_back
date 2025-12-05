@@ -30,8 +30,8 @@ const CheckoutPayment = sequelize.define(
 
 (async () => {
   try {
-    await CheckoutPayment.sync({ alter: true });
-    console.log("✅ Tabla 'checkout_payments' sincronizada.");
+    await CheckoutPayment.sync({ alter: false });
+    //console.log("✅ Tabla 'checkout_payments' sincronizada.");
   } catch (err) {
     console.error("❌ Error sincronizando CheckoutPayment:", err);
   }

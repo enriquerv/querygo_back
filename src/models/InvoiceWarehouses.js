@@ -24,8 +24,8 @@ const InvoiceWarehouse = sequelize.define(
 
 (async () => {
   try {
-    await InvoiceWarehouse.sync({ alter: true });
-    console.log("✅ Tabla 'invoice_warehouses' sincronizada.");
+    await InvoiceWarehouse.sync({ alter: false });
+    //console.log("✅ Tabla 'invoice_warehouses' sincronizada.");
   } catch (err) {
     console.error("❌ Error sincronizando InvoiceWarehouse:", err);
   }

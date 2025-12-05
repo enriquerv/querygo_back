@@ -29,8 +29,8 @@ const CIClient = sequelize.define(
 
 (async () => {
   try {
-    await CIClient.sync({ alter: true });
-    console.log("✅ Tabla 'c_i_clients' sincronizada.");
+    await CIClient.sync({ alter: false });
+    //console.log("✅ Tabla 'c_i_clients' sincronizada.");
   } catch (err) {
     console.error("❌ Error sincronizando CIClient:", err);
   }

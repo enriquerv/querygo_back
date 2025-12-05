@@ -16,8 +16,8 @@ const MenuModule = sequelize.define(
 
 (async () => {
   try {
-    await MenuModule.sync({ alter: true });
-    console.log("✅ Tabla 'menu_modules' sincronizada.");
+    await MenuModule.sync({ alter: false });
+    //console.log("✅ Tabla 'menu_modules' sincronizada.");
   } catch (err) {
     console.error("❌ Error sincronizando MenuModule:", err);
   }

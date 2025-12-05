@@ -175,7 +175,7 @@ const InvoiceFolios = sequelize.define("InvoiceFolios", {
 (async () => {
     try {
         await InvoiceFolios.sync({ alter: false });
-        console.log("✅ Tabla 'invoice_folios' sincronizada con paranoid y deleted_at.");
+        //console.log("✅ Tabla 'invoice_folios' sincronizada con paranoid y deleted_at.");
     } catch (err) {
         console.error("❌ Error sincronizando InvoiceFolios:", err);
     }

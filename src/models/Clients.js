@@ -92,8 +92,8 @@ const Client = sequelize.define(
 // 🔹 Sincronizar solo este modelo
 (async () => {
   try {
-    await Client.sync({ alter: true });
-    console.log("✅ Tabla 'clients' sincronizada.");
+    await Client.sync({ alter: false });
+    //console.log("✅ Tabla 'clients' sincronizada.");
   } catch (err) {
     console.error("❌ Error sincronizando Client:", err);
   }

@@ -25,8 +25,8 @@ const Chat = sequelize.define("Chat", {
 // 🔹 Sincroniza solo este modelo
 (async () => {
     try {
-        await Chat.sync({ alter: true });
-        console.log("✅ Tabla 'chats' sincronizada.");
+        await Chat.sync({ alter: false });
+        //console.log("✅ Tabla 'chats' sincronizada.");
     } catch (err) {
         console.error("❌ Error sincronizando Chat:", err);
     }
