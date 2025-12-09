@@ -60,11 +60,7 @@ const createNewChatAndGenerateQuery = async (req, res) => {
 
 
     // 3. EJECUTAR QUERY y GENERAR REPORTE
-<<<<<<< HEAD
-    const { reportPath, reportMessage, success } = await executeQueryAndGenerateReport(generatedQuery, userId, conv[0].id, chatId);
-=======
-    const { reportPath, reportMessage } = await executeQueryAndGenerateReport(query, userId, conv[0].id, chatId, statusQuery);
->>>>>>> 9a0b711 (cambios)
+    const { reportPath, reportMessage, success } = await executeQueryAndGenerateReport(query, userId, conv[0].id, chatId);
     console.log("=========================");
     console.log("REPORT DATA")
     console.log("Report Path:", reportPath);
@@ -72,39 +68,27 @@ const createNewChatAndGenerateQuery = async (req, res) => {
     console.log("=========================");
 
     // 4. GUARDAR RESPUESTA DE LA IA en la conversación
-<<<<<<< HEAD
     // La IA responde con un mensaje de éxito y el path del reporte
     // const assistantResponse = `${MessageQuery}\n\n**Query Generada:**\n${generatedQuery}\n\n**Reporte:**\n${reportPath}`;
 
     await Conversation.create({
       chat_id: chatId,
       role: 'assistant',
-      content: reportMessage,
+      content: success ? MessageIA : reportMessage,
       report_path: reportPath,
       report_success: success
-=======
-    await Conversation.create({
-      chat_id: chatId,
-      role: 'assistant',
-      content: MessageIA
->>>>>>> 9a0b711 (cambios)
     });
     
 
     // await delay(7000); // Pausa la ejecución por 7000 milisegundos (7 segundos)
 
     // 5. RESPONDER AL CLIENTE
+    
     res.status(201).json({
       chatId,
-<<<<<<< HEAD
-      message: reportMessage,
+      message: success ? MessageIA : reportMessage,
       report_path: reportPath,
       report_success: success
-=======
-      message: MessageIA,
-      query: query,
-      reportPath: reportPath
->>>>>>> 9a0b711 (cambios)
     });
 
   } catch (error) {
@@ -190,65 +174,59 @@ const continueConversationAndGenerateQuery = async (req, res) => {
       return res.status(404).json({ error: 'Chat no encontrado o no autorizado.' });
     }
 
-    // 2. Guardar el nuevo prompt del usuario en la conversación
+    // 2. Obtener la conversación anterior para que recuerde
+    const allConversation = await Conversation.findAll({
+      where: { chat_id: chat_id },
+      attributes: ['role', 'content', 'createdAt', 'report_path', 'report_success'],
+      order: [['createdAt', 'ASC']]
+    });
+    const allConv = formatConversationHistory(allConversation);
+    console.log("===========ALL CONVER==============");
+    console.log(allConv);
+    console.log("=========================");
+    
+    // 3. Guardar el nuevo prompt del usuario en la conversación
     const conv = await Conversation.create({ chat_id, role: 'user', content: user_prompt });
+    
 
-    // 3. GENERAR QUERY (Text-to-SQL con OpenAI)
+    // 4. GENERAR QUERY (Text-to-SQL con OpenAI)
     // La lógica es la misma: generar una query basada en el prompt y el esquema
-    const { query, statusQuery, MessageIA } = await generateQueryFromPrompt(user_prompt, DB_SCHEMA);
+    const { query, statusQuery, MessageIA } = await generateQueryFromPrompt(user_prompt, DB_SCHEMA, allConv);
     console.log("=========================");
     console.log("DATA GENERAL")
     console.log(userId, userId, conv.id, chat_id)
     console.log("=========================");
 
-    // 4. EJECUTAR QUERY y GENERAR REPORTE
-<<<<<<< HEAD
-    const { reportPath, reportMessage, success  } = await executeQueryAndGenerateReport(generatedQuery, userId, conv.id, chat_id);
-=======
-    const { reportPath, reportMessage } = await executeQueryAndGenerateReport(query, userId, conv.id, chat_id, statusQuery);
->>>>>>> 9a0b711 (cambios)
+    // 5. EJECUTAR QUERY y GENERAR REPORTE
+    const { reportPath, reportMessage, success  } = await executeQueryAndGenerateReport(query, userId, conv.id, chat_id);
     console.log("=========================");
     console.log("REPORT DATA")
     console.log("Report Path:", reportPath);
     console.log("Report Message:", reportMessage);
     console.log("=========================");
 
-    // 5. GUARDAR RESPUESTA DE LA IA en la conversación
-<<<<<<< HEAD
+    // 6. GUARDAR RESPUESTA DE LA IA en la conversación
     // const assistantResponse = `${MessageQuery}\n\n**Query Generada:**\n${generatedQuery}\n\n**Reporte:**\n${reportPath}`;
 
-=======
->>>>>>> 9a0b711 (cambios)
     await Conversation.create({
       chat_id: chat_id,
       role: 'assistant',
-<<<<<<< HEAD
-      content: reportMessage,
+      content: success ? MessageIA : reportMessage,
       report_path: reportPath,
       report_success: success
-=======
-      content: MessageIA
->>>>>>> 9a0b711 (cambios)
     });
 
-    // 6. Actualizar la marca de tiempo del chat (para orden en la sidebar)
+    // 7. Actualizar la marca de tiempo del chat (para orden en la sidebar)
     await chat.update({ updatedAt: new Date() });
 
     // await delay(7000);
 
-    // 7. RESPONDER AL CLIENTE
+    // 8. RESPONDER AL CLIENTE
     res.status(200).json({
-<<<<<<< HEAD
       chatId: chat_id,
-      message: reportMessage,
+      message: success ? MessageIA : reportMessage,
       report_path: reportPath,
       report_success: success
-=======
-      chat_id,
-      message: MessageIA,
-      query: query,
-      reportPath: reportPath
->>>>>>> 9a0b711 (cambios)
     });
 
   } catch (error) {
@@ -256,6 +234,47 @@ const continueConversationAndGenerateQuery = async (req, res) => {
     res.status(500).json({ error: 'Hubo un error al procesar la solicitud.', detail: error.message });
   }
 };
+
+
+// -------------------------------------------------------------------------
+// 5. Convierte un array de objetos de conversación en un string formateado para el prompt de la IA.
+// -------------------------------------------------------------------------
+function formatConversationHistory(conversations) {
+  if (!conversations || conversations.length === 0) {
+    return ""; // Devuelve cadena vacía si no hay historial
+  }
+
+  // Título que sirve como separador claro para la IA
+  let historyString = "\n--- HISTORIAL DE CONVERSACIÓN ANTERIOR ---\n\n";
+
+  conversations.forEach(conv => {
+    // Si el rol es 'assistant' y se generó una query exitosa, 
+    // incluimos solo la query para ahorrar tokens y dar contexto SQL clave.
+    if (conv.role === 'assistant' && conv.report_success === true && conv.report_path) {
+        
+        // Asume que el 'content' del assistant contiene el mensaje amigable, 
+        // y necesitamos saber qué query generó. Si tienes la query guardada aparte, úsala.
+        // Para simplificar, asumiremos que la query es el dato más relevante aquí.
+        
+        // Si tu modelo `Conversation` también almacena la query SQL generada,
+        // sería ideal incluirla. (Ej: conv.generated_sql_query)
+        
+        // Si no tienes la query SQL guardada, solo usa el mensaje del asistente.
+        historyString += `[Assistant]: El reporte fue generado exitosamente. Mensaje: ${conv.content}\n`;
+        
+    } else if (conv.role === 'assistant') {
+        // Respuesta del asistente (ej. mensaje amigable, o error)
+        historyString += `[Assistant]: ${conv.content}\n`;
+
+    } else if (conv.role === 'user') {
+        // Pregunta del usuario
+        historyString += `[User]: ${conv.content}\n`;
+    }
+  });
+
+  historyString += "\n--- FIN DEL HISTORIAL ---\n\n";
+  return historyString;
+}
 
 
 module.exports = {

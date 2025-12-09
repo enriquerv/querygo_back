@@ -8,7 +8,7 @@ const client = new OpenAI({
 /**
  * Genera una consulta SQL basada en un prompt del usuario y el esquema de DB.
  */
-async function generateQueryFromPrompt(userPrompt, dbSchema) {
+async function generateQueryFromPrompt(userPrompt, dbSchema, allConv) {
     try {
         const systemInstructions = `
             Eres un generador de queries SQL para MariaDB. Tu tarea es convertir preguntas en lenguaje natural a queries SQL.
@@ -28,8 +28,11 @@ async function generateQueryFromPrompt(userPrompt, dbSchema) {
                     "status": '200 si regresa la query, 500 si no pudo generarla'
                 }
 
-            ### Esquema de la base de datos
-            ${dbSchema}
+            ### Esquema de la base de datos:
+            - ${dbSchema}
+
+            ### Conversación anterior para que se tenga contexto de lo que se ha hablado:
+            - ${allConv}
         `;
 
         const response = await client.responses.create({

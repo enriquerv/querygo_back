@@ -15,6 +15,9 @@ const DB_SCHEMA = `
       ### checkout_payments
       checkout_payments (id, checkout_id, invoice_id, invoice_type, type, amount, reference, observations, checkout_user_id main_checkout_user_id, voucher_status, created_at, updated_at, deleted_at)
 
+      ### flights
+      flights (id, extra1, flight_number, date, origin_iata_id, extra_iata_id, record, blocked, from_manifest, is_old, created_at, updated_at)
+
       ### c_i\_clients
       c_i\_clients (id, nput_semih, select_cp, redit_acount, cfdi, select_client, agent_id, Observaciones, invoice_exit_id, method_payment, created_at, updated_at, deleted_at)
 

@@ -38,7 +38,7 @@ const Conversation = sequelize.define("Conversation", {
 (async () => {
     try {
         await Conversation.sync({ alter: false });
-        //console.log("✅ Tabla 'conversations' sincronizada.");
+        console.log("✅ Tabla 'conversations' sincronizada.");
     } catch (err) {
         console.error("❌ Error sincronizando Conversation:", err);
     }
