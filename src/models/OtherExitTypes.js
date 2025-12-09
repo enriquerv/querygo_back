@@ -1,6 +1,6 @@
 // models/OtherExitType.js
 const { DataTypes } = require("sequelize");
-const sequelize = require("./index");
+const {sequelize} = require("./index");
 
 const OtherExitType = sequelize.define(
   "OtherExitType",

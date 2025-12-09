@@ -60,7 +60,7 @@ const createNewChatAndGenerateQuery = async (req, res) => {
 
 
     // 3. EJECUTAR QUERY y GENERAR REPORTE
-    const { reportPath, reportMessage } = await executeQueryAndGenerateReport(generatedQuery, userId, conv[0].id, chatId);
+    const { reportPath, reportMessage, success } = await executeQueryAndGenerateReport(generatedQuery, userId, conv[0].id, chatId);
     console.log("=========================");
     console.log("REPORT DATA")
     console.log("Report Path:", reportPath);
@@ -69,22 +69,25 @@ const createNewChatAndGenerateQuery = async (req, res) => {
 
     // 4. GUARDAR RESPUESTA DE LA IA en la conversación
     // La IA responde con un mensaje de éxito y el path del reporte
-    const assistantResponse = `${MessageQuery}\n\n**Query Generada:**\n${generatedQuery}\n\n**Reporte:**\n${reportPath}`;
+    // const assistantResponse = `${MessageQuery}\n\n**Query Generada:**\n${generatedQuery}\n\n**Reporte:**\n${reportPath}`;
 
     await Conversation.create({
       chat_id: chatId,
       role: 'assistant',
-      content: assistantResponse
+      content: reportMessage,
+      report_path: reportPath,
+      report_success: success
     });
+    
 
     // await delay(7000); // Pausa la ejecución por 7000 milisegundos (7 segundos)
 
     // 5. RESPONDER AL CLIENTE
     res.status(201).json({
       chatId,
-      message: assistantResponse,
-      response: assistantResponse,
-      reportPath: reportPath
+      message: reportMessage,
+      report_path: reportPath,
+      report_success: success
     });
 
   } catch (error) {
@@ -119,6 +122,7 @@ const getUserChats = async (req, res) => {
 // 3. Obtener Conversación Completa
 // -------------------------------------------------------------------------
 const getConversationByChatId = async (req, res) => {
+  console.log("ENTRO A LA FUNCION getConversationByChatId");
   const { chatId } = req.params;
   const { userId } = req.query;
   if (!chatId || !userId) {
@@ -134,7 +138,7 @@ const getConversationByChatId = async (req, res) => {
 
     const conversation = await Conversation.findAll({
       where: { chat_id: chatId },
-      attributes: ['role', 'content', 'createdAt'],
+      attributes: ['role', 'content', 'createdAt', 'report_path', 'report_success'],
       order: [['createdAt', 'ASC']]
     });
 
@@ -181,7 +185,7 @@ const continueConversationAndGenerateQuery = async (req, res) => {
     console.log("=========================");
 
     // 4. EJECUTAR QUERY y GENERAR REPORTE
-    const { reportPath, reportMessage } = await executeQueryAndGenerateReport(generatedQuery, userId, conv.id, chat_id);
+    const { reportPath, reportMessage, success  } = await executeQueryAndGenerateReport(generatedQuery, userId, conv.id, chat_id);
     console.log("=========================");
     console.log("REPORT DATA")
     console.log("Report Path:", reportPath);
@@ -189,12 +193,14 @@ const continueConversationAndGenerateQuery = async (req, res) => {
     console.log("=========================");
 
     // 5. GUARDAR RESPUESTA DE LA IA en la conversación
-    const assistantResponse = `${MessageQuery}\n\n**Query Generada:**\n${generatedQuery}\n\n**Reporte:**\n${reportPath}`;
+    // const assistantResponse = `${MessageQuery}\n\n**Query Generada:**\n${generatedQuery}\n\n**Reporte:**\n${reportPath}`;
 
     await Conversation.create({
       chat_id,
       role: 'assistant',
-      content: assistantResponse
+      content: reportMessage,
+      report_path: reportPath,
+      report_success: success
     });
 
     // 6. Actualizar la marca de tiempo del chat (para orden en la sidebar)
@@ -205,9 +211,9 @@ const continueConversationAndGenerateQuery = async (req, res) => {
     // 7. RESPONDER AL CLIENTE
     res.status(200).json({
       chatId: chat_id,
-      message: assistantResponse,
-      response: assistantResponse,
-      reportPath: reportPath
+      message: reportMessage,
+      report_path: reportPath,
+      report_success: success
     });
 
   } catch (error) {

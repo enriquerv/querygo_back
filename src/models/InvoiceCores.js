@@ -1,6 +1,6 @@
 // models/InvoiceCore.js
 const { DataTypes } = require("sequelize");
-const sequelize = require("./index");
+const {sequelize} = require("./index");
 
 const InvoiceCore = sequelize.define(
   "InvoiceCore",

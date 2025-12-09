@@ -1,5 +1,5 @@
 const { DataTypes } = require("sequelize");
-const sequelize = require("./index"); // Asegúrate de que esta ruta sea correcta
+const {sequelize} = require("./index"); // Asegúrate de que esta ruta sea correcta
 
 const InvoiceFolios = sequelize.define("InvoiceFolios", {
     // 🔑 ID: Clave Primaria Auto-incrementable

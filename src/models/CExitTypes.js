@@ -1,6 +1,6 @@
 // models/CExitType.js
 const { DataTypes } = require("sequelize");
-const sequelize = require("./index");
+const {sequelize} = require("./index");
 
 const CExitType = sequelize.define(
   "CExitType",

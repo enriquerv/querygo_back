@@ -1,6 +1,6 @@
 // models/Agent.js
 const { DataTypes } = require("sequelize");
-const sequelize = require("./index");
+const {sequelize} = require("./index");
 
 const Agent = sequelize.define(
   "Agent",

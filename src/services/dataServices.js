@@ -2,7 +2,7 @@
 const ExcelJS = require("exceljs");
 const path = require("path");
 const fs = require("fs");
-const sequelize = require("../models"); 
+const { ia_db} = require("../models"); 
 const Report = require("../models/Report");
 /**
  * Ejecuta una query SQL y genera un reporte Excel .xlsx
@@ -12,7 +12,7 @@ const Report = require("../models/Report");
 async function executeQueryAndGenerateReport(sqlQuery, userId, conversation_id, chatId) {
   try {
     // 1️⃣ Ejecutar la consulta SQL
-    const [rows] = await sequelize.query(sqlQuery, { raw: true });
+    const [rows] = await ia_db.query(sqlQuery, { raw: true });
 
     if (!rows || rows.length === 0) {
       return {
@@ -55,15 +55,20 @@ async function executeQueryAndGenerateReport(sqlQuery, userId, conversation_id, 
 
     return {
       success: true,
-      message: "Reporte Excel generado correctamente.",
+      reportMessage: "Reporte Excel generado correctamente.",
       reportPath: `/reports/${filename}`,
       rows
     };
   } catch (error) {
     console.error("Error en executeQueryAndGenerateReport:", error);
+    console.error("❌ Error ejecutando query:", error);
+
     return {
       success: false,
-      error: error.message
+      reportMessage: "La consulta SQL no se pudo ejecutar.",
+      error: error.message,
+      reportPath: null,
+      rows: []
     };
   }
 }

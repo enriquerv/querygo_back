@@ -1,5 +1,5 @@
 const { DataTypes } = require("sequelize");
-const sequelize = require("./index");
+const {sequelize} = require("./index");
 
 const Conversation = sequelize.define("Conversation", {
     id: {
@@ -19,6 +19,14 @@ const Conversation = sequelize.define("Conversation", {
         type: DataTypes.TEXT("long"),
         allowNull: false,
     },
+    report_path: {
+        type: DataTypes.STRING(100),
+        allowNull: true
+      },
+      report_success: {
+        type: DataTypes.BOOLEAN,
+        allowNull: true
+      }
 }, {
     tableName: "conversations",
     timestamps: true,

@@ -1,6 +1,6 @@
 // models/CPaymentCondition.js
 const { DataTypes } = require("sequelize");
-const sequelize = require("./index");
+const {sequelize} = require("./index");
 
 const CPaymentCondition = sequelize.define(
   "CPaymentCondition",

@@ -1,7 +1,7 @@
 // models/Profile.js
 const { DataTypes } = require("sequelize");
 // Asegúrate de que la ruta a tu conexión (index.js) sea correcta
-const sequelize = require("./index"); 
+const {sequelize} = require("./index"); 
 
 const Profile = sequelize.define(
   "Profile", // Nombre del modelo

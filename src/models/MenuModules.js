@@ -1,6 +1,6 @@
 // models/MenuModule.js
 const { DataTypes } = require("sequelize");
-const sequelize = require("./index");
+const {sequelize} = require("./index");
 
 const MenuModule = sequelize.define(
   "MenuModule",

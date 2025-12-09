@@ -1,6 +1,6 @@
 // models/UserPermission.js
 const { DataTypes } = require("sequelize");
-const sequelize = require("./index");
+const {sequelize} = require("./index");
 
 const UserPermission = sequelize.define(
   "UserPermission",

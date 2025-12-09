@@ -45,8 +45,30 @@ const download_last = async (req, res) => {
   }
 }
 
+const download_find = async (req, res) => {
+  try {
+    const { report_path } = req.query;
+
+    const lastReport = await Report.findOne({
+      where: { report_path: report_path },
+    });
+
+    if (!lastReport) {
+      return res.status(404).json({ error: "No hay reportes para esta conversación." });
+    }
+
+    const absolutePath = path.join(__dirname, "..", lastReport.report_path);
+
+    return res.download(absolutePath); 
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Error al descargar el archivo." });
+  }
+}
+
 
 module.exports = {
   getReports,
-  download_last
+  download_last,
+  download_find
 };
