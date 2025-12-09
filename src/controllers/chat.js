@@ -56,11 +56,15 @@ const createNewChatAndGenerateQuery = async (req, res) => {
 
 
     // 2. GENERAR QUERY (Text-to-SQL con OpenAI)
-    const { generatedQuery, statusQuery, MessageQuery } = await generateQueryFromPrompt(user_prompt, DB_SCHEMA);
+    const { query, statusQuery, MessageIA } = await generateQueryFromPrompt(user_prompt, DB_SCHEMA);
 
 
     // 3. EJECUTAR QUERY y GENERAR REPORTE
+<<<<<<< HEAD
     const { reportPath, reportMessage, success } = await executeQueryAndGenerateReport(generatedQuery, userId, conv[0].id, chatId);
+=======
+    const { reportPath, reportMessage } = await executeQueryAndGenerateReport(query, userId, conv[0].id, chatId, statusQuery);
+>>>>>>> 9a0b711 (cambios)
     console.log("=========================");
     console.log("REPORT DATA")
     console.log("Report Path:", reportPath);
@@ -68,6 +72,7 @@ const createNewChatAndGenerateQuery = async (req, res) => {
     console.log("=========================");
 
     // 4. GUARDAR RESPUESTA DE LA IA en la conversación
+<<<<<<< HEAD
     // La IA responde con un mensaje de éxito y el path del reporte
     // const assistantResponse = `${MessageQuery}\n\n**Query Generada:**\n${generatedQuery}\n\n**Reporte:**\n${reportPath}`;
 
@@ -77,6 +82,12 @@ const createNewChatAndGenerateQuery = async (req, res) => {
       content: reportMessage,
       report_path: reportPath,
       report_success: success
+=======
+    await Conversation.create({
+      chat_id: chatId,
+      role: 'assistant',
+      content: MessageIA
+>>>>>>> 9a0b711 (cambios)
     });
     
 
@@ -85,9 +96,15 @@ const createNewChatAndGenerateQuery = async (req, res) => {
     // 5. RESPONDER AL CLIENTE
     res.status(201).json({
       chatId,
+<<<<<<< HEAD
       message: reportMessage,
       report_path: reportPath,
       report_success: success
+=======
+      message: MessageIA,
+      query: query,
+      reportPath: reportPath
+>>>>>>> 9a0b711 (cambios)
     });
 
   } catch (error) {
@@ -178,14 +195,18 @@ const continueConversationAndGenerateQuery = async (req, res) => {
 
     // 3. GENERAR QUERY (Text-to-SQL con OpenAI)
     // La lógica es la misma: generar una query basada en el prompt y el esquema
-    const { generatedQuery, statusQuery, MessageQuery } = await generateQueryFromPrompt(user_prompt, DB_SCHEMA);
+    const { query, statusQuery, MessageIA } = await generateQueryFromPrompt(user_prompt, DB_SCHEMA);
     console.log("=========================");
     console.log("DATA GENERAL")
     console.log(userId, userId, conv.id, chat_id)
     console.log("=========================");
 
     // 4. EJECUTAR QUERY y GENERAR REPORTE
+<<<<<<< HEAD
     const { reportPath, reportMessage, success  } = await executeQueryAndGenerateReport(generatedQuery, userId, conv.id, chat_id);
+=======
+    const { reportPath, reportMessage } = await executeQueryAndGenerateReport(query, userId, conv.id, chat_id, statusQuery);
+>>>>>>> 9a0b711 (cambios)
     console.log("=========================");
     console.log("REPORT DATA")
     console.log("Report Path:", reportPath);
@@ -193,14 +214,21 @@ const continueConversationAndGenerateQuery = async (req, res) => {
     console.log("=========================");
 
     // 5. GUARDAR RESPUESTA DE LA IA en la conversación
+<<<<<<< HEAD
     // const assistantResponse = `${MessageQuery}\n\n**Query Generada:**\n${generatedQuery}\n\n**Reporte:**\n${reportPath}`;
 
+=======
+>>>>>>> 9a0b711 (cambios)
     await Conversation.create({
-      chat_id,
+      chat_id: chat_id,
       role: 'assistant',
+<<<<<<< HEAD
       content: reportMessage,
       report_path: reportPath,
       report_success: success
+=======
+      content: MessageIA
+>>>>>>> 9a0b711 (cambios)
     });
 
     // 6. Actualizar la marca de tiempo del chat (para orden en la sidebar)
@@ -210,10 +238,17 @@ const continueConversationAndGenerateQuery = async (req, res) => {
 
     // 7. RESPONDER AL CLIENTE
     res.status(200).json({
+<<<<<<< HEAD
       chatId: chat_id,
       message: reportMessage,
       report_path: reportPath,
       report_success: success
+=======
+      chat_id,
+      message: MessageIA,
+      query: query,
+      reportPath: reportPath
+>>>>>>> 9a0b711 (cambios)
     });
 
   } catch (error) {

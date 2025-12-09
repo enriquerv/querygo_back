@@ -67,9 +67,9 @@ async function generateQueryFromPrompt(userPrompt, dbSchema) {
             
 
             return {
-                generatedQuery: query,
+                query: query,
                 statusQuery: status,
-                MessageQuery: mensaje,
+                MessageIA: mensaje,
             };
 
         } catch (e) {

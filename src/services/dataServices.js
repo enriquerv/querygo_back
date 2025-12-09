@@ -9,7 +9,7 @@ const Report = require("../models/Report");
  * @param {string} sqlQuery
  * @param {number|string} userId
  */
-async function executeQueryAndGenerateReport(sqlQuery, userId, conversation_id, chatId) {
+async function executeQueryAndGenerateReport(sqlQuery, userId, conversation_id, chatId, statusQuery) {
   try {
     // 1️⃣ Ejecutar la consulta SQL
     const [rows] = await ia_db.query(sqlQuery, { raw: true });
